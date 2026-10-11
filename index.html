@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Red Ball 4: Мега Епічна Пригода</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka One', cursive, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        .text-shadow {
+            text-shadow: 4px 4px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000, 0px 6px 15px rgba(0,0,0,0.7);
+        }
+        .text-shadow-sm {
+            text-shadow: 2px 2px 0px #000;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+        .btn-game {
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 0 #b45309, 0 15px 25px rgba(0,0,0,0.5);
+        }
+        .btn-game:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #b45309, 0 20px 30px rgba(0,0,0,0.6);
+        }
+        .btn-game:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #b45309, 0 5px 10px rgba(0,0,0,0.4);
+        }
+        .btn-purple {
+            box-shadow: 0 8px 0 #581c87, 0 15px 25px rgba(0,0,0,0.5);
+        }
+        .btn-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #581c87, 0 20px 30px rgba(0,0,0,0.6);
+        }
+        .btn-purple:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #581c87, 0 5px 10px rgba(0,0,0,0.4);
+        }
+        @keyframes float-ball {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        .animate-float {
+            animation: float-ball 3s ease-in-out infinite;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="w-screen h-screen flex flex-col items-center justify-center relative">
+
+    <div id="app" class="w-full h-full max-w-6xl max-h-[920px] flex flex-col relative overflow-hidden shadow-2xl rounded-3xl bg-slate-950 border-4 border-amber-500/50">
+
+        <!-- STUNNING MAIN MENU -->
+        <div id="screen-menu" class="absolute inset-0 flex flex-col items-center justify-between p-6 md:p-10 z-20 bg-gradient-to-br from-indigo-900 via-sky-600 to-emerald-800">
+            <!-- Top Bar -->
+            <div class="w-full flex justify-between items-center z-10">
+                <div class="glass-panel px-5 py-2.5 rounded-2xl flex items-center gap-3 text-yellow-300 font-black text-lg shadow-xl">
+                    <span class="text-2xl animate-pulse">👑</span> Red Ball 4 Remake
+                </div>
+                <button onclick="openSkinsMenu()" class="btn-purple bg-purple-600 hover:bg-purple-500 text-white font-black px-5 py-2.5 rounded-2xl border-2 border-purple-300 flex items-center gap-2 shadow-xl tracking-wider">
+                    <span>🎨 Скіни</span>
+                </button>
+            </div>
+
+            <!-- Center Animated Hero -->
+            <div class="text-center my-auto z-10 flex flex-col items-center">
+                <div class="animate-float relative w-36 h-36 md:w-48 md:h-48 mb-6 flex items-center justify-center">
+                    <div class="absolute w-full h-full rounded-full bg-gradient-to-tr from-red-600 to-orange-400 shadow-[0_0_50px_rgba(239,68,68,0.8)] border-4 border-red-200 flex items-center justify-center">
+                        <div class="flex gap-4 mb-2">
+                            <div class="w-9 h-9 bg-white rounded-full flex items-end justify-center pb-1 shadow-inner"><div class="w-4 h-4 bg-black rounded-full animate-bounce"></div></div>
+                            <div class="w-9 h-9 bg-white rounded-full flex items-end justify-center pb-1 shadow-inner"><div class="w-4 h-4 bg-black rounded-full animate-bounce"></div></div>
+                        </div>
+                        <div class="absolute bottom-6 w-12 h-5 bg-black/30 rounded-full blur-sm"></div>
+                    </div>
+                </div>
+                <h1 class="text-5xl md:text-8xl text-yellow-300 text-shadow tracking-wider uppercase font-black mb-3">RED BALL 4</h1>
+                <p class="text-white text-lg md:text-2xl text-shadow-sm font-bold max-w-xl">Мега-пригода з покращеною фізикою, ефектами та неймовірними світами!</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col md:flex-row gap-5 w-full max-w-md z-10 mb-2">
+                <button onclick="openChapterSelect()" class="btn-game flex-1 bg-amber-500 hover:bg-amber-400 text-white text-2xl md:text-3xl py-4 rounded-2xl font-black border-2 border-amber-200 uppercase tracking-wider flex items-center justify-center gap-3 shadow-2xl">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Грати
+                </button>
+                <button onclick="openSkinsMenu()" class="btn-purple flex-1 bg-purple-600 hover:bg-purple-500 text-white text-2xl md:text-3xl py-4 rounded-2xl font-black border-2 border-purple-300 uppercase tracking-wider flex items-center justify-center gap-3 shadow-2xl">
+                    Колекція
+                </button>
+            </div>
+        </div>
+
+        <!-- CHAPTER SELECT SCREEN -->
+        <div id="screen-chapters" class="absolute inset-0 flex flex-col p-6 md:p-10 z-20 bg-slate-950 hidden overflow-y-auto">
+            <div class="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
+                <button onclick="closeChapterSelect()" class="glass-panel hover:bg-slate-800 text-white px-5 py-2.5 rounded-2xl text-lg font-bold flex items-center gap-2 transition">
+                    ← Меню
+                </button>
+                <h2 class="text-3xl md:text-4xl text-yellow-400 text-shadow font-black text-center">Обери Світ (5 Розділів)</h2>
+                <div class="w-20"></div>
+            </div>
+            <div id="chapters-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8 max-w-6xl mx-auto w-full"></div>
+        </div>
+
+        <!-- LEVEL SELECT SCREEN -->
+        <div id="screen-levels" class="absolute inset-0 flex flex-col p-6 md:p-10 z-20 bg-slate-950 hidden overflow-y-auto">
+            <div class="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
+                <button onclick="openChapterSelect()" class="glass-panel hover:bg-slate-800 text-white px-5 py-2.5 rounded-2xl text-lg font-bold flex items-center gap-2 transition">
+                    ← Світи
+                </button>
+                <h2 id="chapter-title-header" class="text-2xl md:text-3xl text-yellow-400 text-shadow font-black text-center">Рівні</h2>
+                <div class="w-20"></div>
+            </div>
+            <div class="text-center text-slate-300 mb-6 text-sm md:text-base font-semibold">14 рівнів з головоломками та Епічний Бос на 15-му рівні!</div>
+            <div id="levels-grid" class="grid grid-cols-3 sm:grid-cols-5 gap-4 max-w-4xl mx-auto pb-8 w-full"></div>
+        </div>
+
+        <!-- SKINS SCREEN -->
+        <div id="screen-skins" class="absolute inset-0 flex flex-col p-6 md:p-10 z-20 bg-slate-950 hidden overflow-y-auto">
+            <div class="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
+                <button onclick="closeSkinsMenu()" class="glass-panel hover:bg-slate-800 text-white px-5 py-2.5 rounded-2xl text-lg font-bold flex items-center gap-2 transition">
+                    ← Назад
+                </button>
+                <h2 class="text-3xl md:text-4xl text-purple-400 text-shadow font-black">Колекція Скінів</h2>
+                <div class="w-20"></div>
+            </div>
+            <div id="skins-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto pb-8 w-full"></div>
+        </div>
+
+        <!-- GAMEPLAY SCREEN -->
+        <div id="screen-game" class="absolute inset-0 flex flex-col z-10 hidden">
+            <!-- HUD Header -->
+            <div class="glass-panel text-white px-6 py-3 flex items-center justify-between border-b-2 border-slate-800 select-none z-10">
+                <div class="flex items-center gap-4">
+                    <button onclick="returnToLevelSelect()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg transition">Меню</button>
+                    <span id="hud-level-info" class="text-base md:text-xl text-yellow-400 font-bold">Розділ 1 • Рівень 1</span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 bg-slate-900/80 px-3.5 py-1.5 rounded-xl border border-slate-700 shadow-inner">
+                        <span class="text-lg">⭐</span>
+                        <span id="hud-stars" class="text-base font-bold text-yellow-300">0/3</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-900/80 px-3.5 py-1.5 rounded-xl border border-slate-700 shadow-inner">
+                        <span class="text-lg">❤️</span>
+                        <span id="hud-lives" class="text-base font-bold text-red-400">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div id="canvas-container" class="relative flex-1 w-full h-full overflow-hidden bg-sky-400">
+                <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+
+                <!-- Boss Health Bar HUD -->
+                <div id="boss-hud" class="absolute top-4 left-1/2 transform -translate-x-1/2 w-80 max-w-[90%] glass-panel p-3.5 rounded-2xl border-2 border-red-500 hidden z-10 shadow-2xl">
+                    <div class="flex justify-between text-white font-bold text-sm mb-1.5">
+                        <span id="boss-name" class="text-red-400">БОС РОЗДІЛУ</span>
+                        <span id="boss-hp-text">100%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-4 rounded-full overflow-hidden border border-slate-700">
+                        <div id="boss-hp-bar" class="bg-gradient-to-r from-red-600 to-orange-500 h-full w-full transition-all duration-200"></div>
+                    </div>
+                </div>
+
+                <!-- Action Prompt -->
+                <div id="action-prompt" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-950 px-6 py-3 rounded-2xl text-lg md:text-xl font-black hidden border-2 border-yellow-200 shadow-2xl animate-bounce">
+                    [E] Взаємодіяти з важільом!
+                </div>
+            </div>
+
+            <!-- Mobile & Touch Controls -->
+            <div class="glass-panel p-4 flex items-center justify-between border-t-2 border-slate-800 select-none z-10">
+                <div class="flex gap-3">
+                    <button id="btn-left" class="bg-slate-800 hover:bg-slate-700 active:bg-amber-500 text-white w-16 h-16 rounded-2xl text-2xl font-black flex items-center justify-center shadow-lg border-2 border-slate-600 transition">◀</button>
+                    <button id="btn-right" class="bg-slate-800 hover:bg-slate-700 active:bg-amber-500 text-white w-16 h-16 rounded-2xl text-2xl font-black flex items-center justify-center shadow-lg border-2 border-slate-600 transition">▶</button>
+                </div>
+                <div class="text-slate-400 text-xs text-center hidden sm:block font-semibold">
+                    Керування: A/D або Стрілки • [Space] — Стрибок • [E] — Дія
+                </div>
+                <div class="flex gap-3">
+                    <button id="btn-action" class="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-400 text-white w-16 h-16 rounded-2xl text-xl font-black flex items-center justify-center shadow-lg border-2 border-emerald-400 transition">E</button>
+                    <button id="btn-jump" class="bg-amber-600 hover:bg-amber-500 active:bg-amber-400 text-white w-24 h-16 rounded-2xl text-lg font-black flex items-center justify-center shadow-lg border-2 border-amber-300 transition">СКАК</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WIN MODAL -->
+        <div id="modal-win" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center z-30 hidden p-4">
+            <div class="glass-panel border-4 border-emerald-500 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl animate-float">
+                <div class="text-5xl mb-2">🎉</div>
+                <h2 class="text-4xl text-emerald-400 text-shadow mb-2 font-black">Рівень Пройдено!</h2>
+                <p id="win-message" class="text-white text-lg mb-6 font-bold">Зібрано зірок: 3/3</p>
+                <div class="flex gap-4">
+                    <button onclick="returnToLevelSelect()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-3.5 rounded-2xl font-bold text-lg border border-slate-600 transition">Рівні</button>
+                    <button onclick="nextLevel()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-3.5 rounded-2xl font-black text-lg border border-emerald-200 transition shadow-lg">Далі ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAPTER WIN MODAL -->
+        <div id="modal-chapter-win" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center z-30 hidden p-4">
+            <div class="glass-panel border-4 border-purple-500 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl">
+                <div class="text-5xl mb-2">🏆</div>
+                <h2 class="text-3xl md:text-4xl text-purple-400 text-shadow mb-2 font-black">СВІТ ПРОЙДЕНО!</h2>
+                <p class="text-white text-base mb-4 font-semibold">Ви здолали Квадратного Боса та врятували цей світ!</p>
+                <div class="bg-purple-950/60 border-2 border-purple-400 p-4 rounded-2xl mb-6 shadow-inner">
+                    <div class="text-xl mb-1 text-yellow-300 font-bold">🎁 НОВИЙ СКІН РОЗБЛОКОВАНО!</div>
+                    <div id="unlocked-skin-name" class="text-lg text-white font-black">Скін Розблоковано</div>
+                </div>
+                <button onclick="closeChapterWinModal()" class="w-full bg-purple-600 hover:bg-purple-500 text-white py-3.5 rounded-2xl font-black text-xl border border-purple-300 transition shadow-lg">Продовжити</button>
+            </div>
+        </div>
+
+        <!-- GAME OVER MODAL -->
+        <div id="modal-gameover" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex items-center justify-center z-30 hidden p-4">
+            <div class="glass-panel border-4 border-red-500 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl">
+                <div class="text-5xl mb-2">💥</div>
+                <h2 class="text-4xl text-red-500 text-shadow mb-2 font-black">Ой-йой!</h2>
+                <p class="text-white text-lg mb-6 font-bold">Кулька розбилася. Спробуй ще раз!</p>
+                <div class="flex gap-4">
+                    <button onclick="returnToLevelSelect()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-3.5 rounded-2xl font-bold text-lg border border-slate-600 transition">Вихід</button>
+                    <button onclick="restartLevel()" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-3.5 rounded-2xl font-black text-lg border border-red-400 transition shadow-lg">Ще раз 🔄</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const CHAPTERS = [
+            { id: 0, name: "1. Зелені Пагорби", theme: "steppe", bgColor: "#38bdf8", groundColor: "#16a34a", wallColor: "#15803d", desc: "Сонячні пагорби, дерев'яні ящики, важільні мости та Король Бос.", bossName: "Король Квадратної Армії" },
+            { id: 1, name: "2. Глибокий Ліс", theme: "forest", bgColor: "#0f766e", groundColor: "#047857", wallColor: "#065f46", desc: "Водойми з водою, гриби-батути, ліани та Ент-Бос.", bossName: "Лісовий Ент-Квадрат" },
+            { id: 2, name: "3. Завод Механік", theme: "mechanical", bgColor: "#334155", groundColor: "#475569", wallColor: "#1e293b", desc: "Конвеєрні стрічки, шестерні, лазери та Прес-Бос.", bossName: "Механічний Павук-Прес" },
+            { id: 3, name: "4. Глибокий Космос", theme: "space", bgColor: "#090d16", groundColor: "#2563eb", wallColor: "#1e3a8a", desc: "Зірки, нульова гравітація та Космічний НЛО Бос.", bossName: "Космічний Інопланетянин" },
+            { id: 4, name: "5. Підземелля & Лава", theme: "dungeon", bgColor: "#450a0a", groundColor: "#7f1d1d", wallColor: "#991b1b", desc: "Бурхлива лава, сталактити та Вогняний Дракон.", bossName: "Вогняний Квадратний Дракон" }
+        ];
+
+        const SKINS = [
+            { id: 0, name: "Класичний Червоний", chapterRequired: -1, color: "#ef4444", border: "#991b1b", desc: "Стандартна відважна куля!" },
+            { id: 1, name: "Футбольний М'яч", chapterRequired: 0, color: "#ffffff", border: "#334155", desc: "Нагорода за Зелені Пагорби." },
+            { id: 2, name: "Ніндзя Куля", chapterRequired: 1, color: "#18181b", border: "#3f3f46", desc: "Нагорода за Глибокий Ліс." },
+            { id: 3, name: "Герой в Масці", chapterRequired: 2, color: "#3b82f6", border: "#1d4ed8", desc: "Нагорода за Завод Механік." },
+            { id: 4, name: "Галактична Зірка", chapterRequired: 3, color: "#8b5cf6", border: "#6d28d9", desc: "Нагорода за Глибокий Космос." },
+            { id: 5, name: "Вогняний Дракон", chapterRequired: 4, color: "#f97316", border: "#c2410c", desc: "Нагорода за Підземелля!" }
+        ];
+
+        let gameState = {
+            currentChapter: 0,
+            currentLevel: 0,
+            unlockedLevels: [0, 0, 0, 0, 0],
+            unlockedChapters: 0,
+            unlockedSkins: [0],
+            selectedSkin: 0,
+            lives: 3,
+            starsCollected: 0,
+            levelWon: false,
+            gameOver: false
+        };
+
+        function loadProgress() {
+            const saved = localStorage.getItem('redball4_remake_pro_data');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    gameState.unlockedLevels = data.unlockedLevels || gameState.unlockedLevels;
+                    gameState.unlockedChapters = data.unlockedChapters || 0;
+                    gameState.unlockedSkins = data.unlockedSkins || [0];
+                    gameState.selectedSkin = data.selectedSkin || 0;
+                } catch(e) {}
+            }
+        }
+        function saveProgress() {
+            localStorage.setItem('redball4_remake_pro_data', JSON.stringify({
+                unlockedLevels: gameState.unlockedLevels,
+                unlockedChapters: gameState.unlockedChapters,
+                unlockedSkins: gameState.unlockedSkins,
+                selectedSkin: gameState.selectedSkin
+            }));
+        }
+        loadProgress();
+
+        // Screen & UI Elements
+        const screenMenu = document.getElementById('screen-menu');
+        const screenChapters = document.getElementById('screen-chapters');
+        const screenLevels = document.getElementById('screen-levels');
+        const screenSkins = document.getElementById('screen-skins');
+        const screenGame = document.getElementById('screen-game');
+        const modalWin = document.getElementById('modal-win');
+        const modalChapterWin = document.getElementById('modal-chapter-win');
+        const modalGameover = document.getElementById('modal-gameover');
+        const actionPrompt = document.getElementById('action-prompt');
+
+        function hideAllScreens() {
+            screenMenu.classList.add('hidden');
+            screenChapters.classList.add('hidden');
+            screenLevels.classList.add('hidden');
+            screenSkins.classList.add('hidden');
+            screenGame.classList.add('hidden');
+            modalWin.classList.add('hidden');
+            modalChapterWin.classList.add('hidden');
+            modalGameover.classList.add('hidden');
+        }
+
+        function openChapterSelect() { hideAllScreens(); screenChapters.classList.remove('hidden'); renderChaptersGrid(); }
+        function closeChapterSelect() { hideAllScreens(); screenMenu.classList.remove('hidden'); }
+        function openSkinsMenu() { hideAllScreens(); screenSkins.classList.remove('hidden'); renderSkinsGrid(); }
+        function closeSkinsMenu() { hideAllScreens(); screenMenu.classList.remove('hidden'); }
+
+        function renderChaptersGrid() {
+            const grid = document.getElementById('chapters-grid');
+            grid.innerHTML = '';
+            CHAPTERS.forEach((ch, idx) => {
+                const isUnlocked = idx <= gameState.unlockedChapters;
+                const card = document.createElement('div');
+                card.className = `glass-panel rounded-3xl p-6 border-4 flex flex-col justify-between overflow-hidden shadow-xl transition-all ${isUnlocked ? 'border-amber-400 hover:scale-[1.02] cursor-pointer bg-slate-900/90' : 'border-slate-800 opacity-60'}`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-2xl font-black text-yellow-300">${ch.name}</span>
+                            <span class="text-2xl">${isUnlocked ? '🔓' : '🔒'}</span>
+                        </div>
+                        <p class="text-slate-300 text-sm mb-4 leading-relaxed">${ch.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between mt-2 pt-4 border-t border-slate-800">
+                        <span class="text-xs text-slate-400">Бос: <strong class="text-red-400">${ch.bossName}</strong></span>
+                        <span class="bg-amber-500/20 text-amber-300 px-3 py-1 rounded-xl text-xs font-bold border border-amber-500/30">15 рівнів</span>
+                    </div>
+                `;
+                if (isUnlocked) card.onclick = () => selectChapter(idx);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectChapter(chIdx) {
+            gameState.currentChapter = chIdx;
+            screenChapters.classList.add('hidden');
+            screenLevels.classList.remove('hidden');
+            document.getElementById('chapter-title-header').innerText = CHAPTERS[chIdx].name;
+            renderLevelsGrid();
+        }
+
+        function renderLevelsGrid() {
+            const grid = document.getElementById('levels-grid');
+            grid.innerHTML = '';
+            const maxUnlocked = gameState.unlockedLevels[gameState.currentChapter];
+
+            for (let i = 0; i < 15; i++) {
+                const isUnlocked = i <= maxUnlocked;
+                const isBoss = i === 14;
+                const btn = document.createElement('button');
+                btn.className = `h-20 rounded-2xl border-4 font-black text-xl flex flex-col items-center justify-center transition-all shadow-lg ${isUnlocked ? (isBoss ? 'bg-red-600 border-red-400 text-white hover:scale-105 animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.6)]' : 'glass-panel border-amber-400 text-amber-300 hover:scale-105') : 'bg-slate-900/50 border-slate-800 text-slate-600 cursor-not-allowed'}`;
+                
+                if (isBoss) {
+                    btn.innerHTML = `<span class="text-xs uppercase font-bold">Бос</span><span>👹</span>`;
+                } else {
+                    btn.innerHTML = `<span>${i + 1}</span><span class="text-xs">${isUnlocked ? '⭐' : '🔒'}</span>`;
+                }
+
+                if (isUnlocked) btn.onclick = () => startLevel(gameState.currentChapter, i);
+                grid.appendChild(btn);
+            }
+        }
+
+        function renderSkinsGrid() {
+            const grid = document.getElementById('skins-grid');
+            grid.innerHTML = '';
+            SKINS.forEach(skin => {
+                const isUnlocked = gameState.unlockedSkins.includes(skin.id);
+                const isSelected = gameState.selectedSkin === skin.id;
+
+                const card = document.createElement('div');
+                card.className = `glass-panel rounded-3xl p-6 border-4 flex flex-col items-center text-center transition-all shadow-xl ${isSelected ? 'border-purple-400 bg-purple-950/40 shadow-[0_0_25px_rgba(168,85,247,0.4)]' : isUnlocked ? 'border-slate-700' : 'border-slate-900 opacity-60'}`;
+                card.innerHTML = `
+                    <div class="w-24 h-24 rounded-full mb-4 flex items-center justify-center border-4 shadow-2xl relative" style="background-color: ${skin.color}; border-color: ${skin.border};">
+                        <div class="flex gap-2.5 mb-1">
+                            <div class="w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-inner"><div class="w-1.5 h-1.5 bg-black rounded-full"></div></div>
+                            <div class="w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-inner"><div class="w-1.5 h-1.5 bg-black rounded-full"></div></div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-black text-white mb-1">${skin.name}</h3>
+                    <p class="text-slate-400 text-sm mb-4 font-semibold">${skin.desc}</p>
+                    ${isUnlocked ? 
+                        `<button onclick="selectSkin(${skin.id})" class="w-full py-3 rounded-xl font-bold transition ${isSelected ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600'}">${isSelected ? 'Обрано ✓' : 'Вибрати'}</button>` :
+                        `<div class="text-xs text-red-400 font-bold mt-auto py-2.5">🔒 Пройдіть Світ ${skin.chapterRequired + 1}</div>`
+                    }
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectSkin(skinId) { gameState.selectedSkin = skinId; saveProgress(); renderSkinsGrid(); }
+
+        // Game Canvas Engine Setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrameId = null;
+
+        let camera = { x: 0, y: 0 };
+        let player = {
+            x: 100, y: 100, radius: 22,
+            vx: 0, vy: 0, speed: 5.5, jumpForce: -13.5,
+            onGround: false, inWater: false, angle: 0,
+            squashX: 1, squashY: 1
+        };
+
+        let levelData = {
+            width: 4000, height: 600,
+            platforms: [], springs: [], waterZones: [],
+            switches: [], doors: [], crates: [],
+            stars: [], enemies: [], boss: null
+        };
+
+        let particles = [];
+        let keys = { left: false, right: false, jump: false, action: false };
+
+        // Input Listeners
+        window.addEventListener('keydown', e => {
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
+            if (e.code === 'KeyE' || e.code === 'Enter') { if (!keys.action) handleInteraction(); keys.action = true; }
+            if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') { if (!keys.jump) triggerJump(); keys.jump = true; e.preventDefault(); }
+        });
+
+        window.addEventListener('keyup', e => {
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+            if (e.code === 'KeyE' || e.code === 'Enter') keys.action = false;
+            if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') keys.jump = false;
+        });
+
+        // Touch Control Bindings
+        const bindTouch = (id, keyName) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('touchstart', e => { e.preventDefault(); keys[keyName] = true; if(keyName === 'jump') triggerJump(); if(keyName === 'action') handleInteraction(); });
+            el.addEventListener('touchend', e => { e.preventDefault(); keys[keyName] = false; });
+            el.addEventListener('mousedown', e => { e.preventDefault(); keys[keyName] = true; if(keyName === 'jump') triggerJump(); if(keyName === 'action') handleInteraction(); });
+            el.addEventListener('mouseup', e => { e.preventDefault(); keys[keyName] = false; });
+        };
+        bindTouch('btn-left', 'left');
+        bindTouch('btn-right', 'right');
+        bindTouch('btn-jump', 'jump');
+        bindTouch('btn-action', 'action');
+
+        function triggerJump() {
+            if (player.onGround) {
+                player.vy = player.jumpForce;
+                player.onGround = false;
+                player.squashX = 0.75; player.squashY = 1.25;
+                createParticles(player.x, player.y + player.radius, '#ffffff', 8);
+            } else if (player.inWater) {
+                player.vy = -8;
+                createParticles(player.x, player.y, '#38bdf8', 6);
+            }
+        }
+
+        function handleInteraction() {
+            levelData.switches.forEach(sw => {
+                if (Math.abs(player.x - sw.x) < 55 && Math.abs(player.y - sw.y) < 65) {
+                    sw.active = !sw.active;
+                    if (sw.targetDoorId !== undefined) {
+                        const door = levelData.doors.find(d => d.id === sw.targetDoorId);
+                        if (door) door.open = sw.active;
+                    }
+                }
+            });
+        }
+
+        function startLevel(chIdx, lvlIdx) {
+            hideAllScreens();
+            screenGame.classList.remove('hidden');
+            gameState.currentChapter = chIdx;
+            gameState.currentLevel = lvlIdx;
+            gameState.lives = 3;
+            gameState.starsCollected = 0;
+            gameState.levelWon = false;
+            gameState.gameOver = false;
+
+            document.getElementById('hud-level-info').innerText = `${CHAPTERS[chIdx].name} • Рівень ${lvlIdx + 1}`;
+            document.getElementById('hud-lives').innerText = gameState.lives;
+            document.getElementById('hud-stars').innerText = `0/3`;
+            document.getElementById('boss-hud').classList.add('hidden');
+
+            resizeCanvas();
+            generateRedBallLevel(chIdx, lvlIdx);
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.onresize = resizeCanvas;
+
+        function generateRedBallLevel(chIdx, lvlIdx) {
+            const isBossLevel = (lvlIdx === 14);
+            const groundY = (canvas.height || 600) - 80;
+
+            levelData = {
+                width: isBossLevel ? 2200 : 4000 + lvlIdx * 220,
+                height: canvas.height || 600,
+                platforms: [], springs: [], waterZones: [],
+                switches: [], doors: [], crates: [],
+                stars: [], enemies: [], boss: null
+            };
+
+            levelData.platforms.push({ x: 0, y: groundY, w: levelData.width, h: 120 });
+
+            if (isBossLevel) {
+                levelData.platforms.push({ x: 300, y: groundY - 140, w: 220, h: 25 });
+                levelData.platforms.push({ x: 800, y: groundY - 210, w: 220, h: 25 });
+                levelData.platforms.push({ x: 1300, y: groundY - 140, w: 220, h: 25 });
+                levelData.springs.push({ x: 200, y: groundY - 20, w: 45, h: 22 });
+                levelData.springs.push({ x: 1650, y: groundY - 20, w: 45, h: 22 });
+
+                levelData.boss = {
+                    x: 1400, y: groundY - 130, w: 110, h: 110,
+                    hp: 100, maxHp: 100, vx: -3, type: chIdx
+                };
+                player.x = 120; player.y = groundY - 100;
+                return;
+            }
+
+            let curX = 400;
+            while (curX < levelData.width - 500) {
+                const platY = groundY - 110 - (Math.sin(curX * 0.002) * 60);
+
+                if (lvlIdx === 0 && curX === 400) {
+                    levelData.platforms.push({ x: curX, y: platY, w: 320, h: 25 });
+                    levelData.crates.push({ x: curX + 60, y: platY - 45, w: 45, h: 45, vx: 0, vy: 0 });
+                    levelData.switches.push({ x: curX + 240, y: platY - 15, active: false, targetDoorId: 1 });
+                    levelData.doors.push({ id: 1, x: curX + 340, y: platY - 110, w: 25, h: 110, open: false });
+                    curX += 500;
+                } else {
+                    levelData.platforms.push({ x: curX, y: platY, w: 260, h: 25 });
+                    if (chIdx === 1 && Math.random() > 0.5) {
+                        levelData.waterZones.push({ x: curX + 30, y: groundY - 110, w: 180, h: 110 });
+                    }
+                    if (Math.random() > 0.4) {
+                        levelData.enemies.push({ x: curX + 50, y: platY - 38, w: 38, h: 38, minX: curX, maxX: curX + 220, vx: 2, type: 'armored', hp: 2 });
+                    }
+                    curX += 380;
+                }
+            }
+
+            for (let i = 0; i < 3; i++) {
+                levelData.stars.push({ x: 600 + i * 1100, y: groundY - 190, collected: false });
+            }
+            levelData.portalExit = { x: levelData.width - 220, y: groundY - 140, w: 60, h: 120 };
+            player.x = 120; player.y = groundY - 100;
+        }
+
+        function gameLoop() {
+            updatePhysics();
+            renderFrame();
+            if (!gameState.levelWon && !gameState.gameOver) {
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function updatePhysics() {
+            player.inWater = levelData.waterZones.some(w => player.x > w.x && player.x < w.x + w.w && player.y > w.y);
+
+            if (keys.left) { player.vx = -player.speed; player.angle -= 0.18; }
+            else if (keys.right) { player.vx = player.speed; player.angle += 0.18; }
+            else { player.vx *= 0.8; }
+
+            player.vy += 0.58;
+            player.x += player.vx;
+            player.y += player.vy;
+            player.onGround = false;
+
+            // Squash & stretch recovery spring physics
+            player.squashX += (1 - player.squashX) * 0.15;
+            player.squashY += (1 - player.squashY) * 0.15;
+
+            // Platform collision
+            levelData.platforms.forEach(p => {
+                if (player.x + player.radius > p.x && player.x - player.radius < p.x + p.w &&
+                    player.y + player.radius >= p.y && player.y - player.radius < p.y + p.h) {
+                    if (player.vy > 0 && player.y - player.radius < p.y + 18) {
+                        player.y = p.y - player.radius;
+                        player.vy = 0;
+                        if (!player.onGround) {
+                            player.squashX = 1.25; player.squashY = 0.75;
+                        }
+                        player.onGround = true;
+                    }
+                }
+            });
+
+            // Spring collision
+            levelData.springs.forEach(sp => {
+                if (Math.abs(player.x - (sp.x + sp.w/2)) < player.radius + sp.w/2 &&
+                    player.y + player.radius >= sp.y && player.y - player.radius < sp.y + sp.h) {
+                    player.vy = -18;
+                    player.squashX = 0.65; player.squashY = 1.45;
+                    createParticles(player.x, sp.y, '#f59e0b', 10);
+                }
+            });
+
+            // Crate physics & collision
+            levelData.crates.forEach(cr => {
+                cr.vy += 0.5;
+                cr.y += cr.vy;
+                levelData.platforms.forEach(p => {
+                    if (cr.x + cr.w > p.x && cr.x < p.x + p.w && cr.y + cr.h >= p.y && cr.y < p.y + p.h) {
+                        cr.y = p.y - cr.h;
+                        cr.vy = 0;
+                    }
+                });
+                // Player pushing crate
+                if (Math.abs(player.y - (cr.y + cr.h/2)) < player.radius + cr.h/2) {
+                    if (player.x < cr.x && player.x + player.radius > cr.x) {
+                        cr.x = player.x - player.radius - cr.w;
+                    } else if (player.x > cr.x + cr.w && player.x - player.radius < cr.x + cr.w) {
+                        cr.x = player.x + player.radius;
+                    }
+                }
+            });
+
+            // Doors collision
+            levelData.doors.forEach(d => {
+                if (!d.open && player.x + player.radius > d.x && player.x - player.radius < d.x + d.w &&
+                    player.y + player.radius > d.y && player.y - player.radius < d.y + d.h) {
+                    if (player.vx > 0) player.x = d.x - player.radius;
+                    else if (player.vx < 0) player.x = d.x + d.w + player.radius;
+                    player.vx = 0;
+                }
+            });
+
+            // Enemy collision
+            levelData.enemies.forEach(en => {
+                en.x += en.vx;
+                if (en.x < en.minX || en.x > en.maxX) en.vx *= -1;
+
+                if (Math.hypot(player.x - (en.x + en.w/2), player.y - (en.y + en.h/2)) < player.radius + en.w/2) {
+                    if (player.vy > 0 && player.y < en.y + 12) {
+                        player.vy = -11;
+                        en.hp = (en.hp || 1) - 1;
+                        if (en.hp <= 0) levelData.enemies = levelData.enemies.filter(e => e !== en);
+                        createParticles(en.x + en.w/2, en.y + en.h/2, '#ef4444', 14);
+                    } else {
+                        loseLife();
+                    }
+                }
+            });
+
+            // Boss combat update
+            if (levelData.boss) {
+                const b = levelData.boss;
+                b.x += b.vx;
+                if (b.x < 500 || b.x > 1800) b.vx *= -1;
+
+                if (Math.hypot(player.x - (b.x + b.w/2), player.y - (b.y + b.h/2)) < player.radius + b.w/2) {
+                    if (player.vy > 0 && player.y < b.y + 20) {
+                        player.vy = -12;
+                        b.hp -= 10;
+                        createParticles(player.x, player.y, '#f59e0b', 15);
+                        document.getElementById('boss-hp-bar').style.width = `${Math.max(0, b.hp)}%`;
+                        document.getElementById('boss-hp-text').innerText = `${Math.max(0, b.hp)}%`;
+                        if (b.hp <= 0) completeChapter();
+                    } else {
+                        loseLife();
+                    }
+                }
+                document.getElementById('boss-hud').classList.remove('hidden');
+            }
+
+            // Collect Stars
+            levelData.stars.forEach(st => {
+                if (!st.collected && Math.hypot(player.x - st.x, player.y - st.y) < player.radius + 20) {
+                    st.collected = true;
+                    gameState.starsCollected++;
+                    document.getElementById('hud-stars').innerText = `${gameState.starsCollected}/3`;
+                    createParticles(st.x, st.y, '#facc15', 12);
+                }
+            });
+
+            // Action prompt visibility check
+            let showPrompt = false;
+            levelData.switches.forEach(sw => {
+                if (Math.abs(player.x - sw.x) < 60 && Math.abs(player.y - sw.y) < 70) showPrompt = true;
+            });
+            actionPrompt.classList.toggle('hidden', !showPrompt);
+
+            // Exit Portal Trigger
+            if (levelData.portalExit) {
+                const pr = levelData.portalExit;
+                if (player.x > pr.x && player.x < pr.x + pr.w && player.y > pr.y && player.y < pr.y + pr.h) {
+                    completeLevel();
+                }
+            }
+
+            // Update Particles
+            particles.forEach((pt, i) => {
+                pt.x += pt.vx;
+                pt.y += pt.vy;
+                pt.alpha -= 0.03;
+                if (pt.alpha <= 0) particles.splice(i, 1);
+            });
+
+            camera.x = Math.max(0, Math.min(player.x - canvas.width / 2, levelData.width - canvas.width));
+        }
+
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x, y, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8,
+                    color, alpha: 1, size: Math.random() * 6 + 3
+                });
+            }
+        }
+
+        function loseLife() {
+            gameState.lives--;
+            document.getElementById('hud-lives').innerText = gameState.lives;
+            createParticles(player.x, player.y, '#ef4444', 20);
+            if (gameState.lives <= 0) {
+                gameState.gameOver = true;
+                modalGameover.classList.remove('hidden');
+            } else {
+                player.x = 120; player.y = 100; player.vx = 0; player.vy = 0;
+            }
+        }
+
+        function restartLevel() { startLevel(gameState.currentChapter, gameState.currentLevel); }
+        function returnToLevelSelect() { hideAllScreens(); screenLevels.classList.remove('hidden'); renderLevelsGrid(); }
+
+        function completeLevel() {
+            gameState.levelWon = true;
+            document.getElementById('win-message').innerText = `Зібрано зірок: ${gameState.starsCollected}/3`;
+            modalWin.classList.remove('hidden');
+            const ch = gameState.currentChapter, lvl = gameState.currentLevel;
+            if (lvl >= gameState.unlockedLevels[ch] && lvl < 14) gameState.unlockedLevels[ch] = lvl + 1;
+            saveProgress();
+        }
+
+        function completeChapter() {
+            gameState.levelWon = true;
+            const ch = gameState.currentChapter;
+            if (ch + 1 > gameState.unlockedChapters && ch + 1 < CHAPTERS.length) gameState.unlockedChapters = ch + 1;
+            if (!gameState.unlockedSkins.includes(ch + 1)) gameState.unlockedSkins.push(ch + 1);
+            document.getElementById('unlocked-skin-name').innerText = SKINS[ch + 1]?.name || "Епічний Скін";
+            saveProgress();
+            modalChapterWin.classList.remove('hidden');
+        }
+
+        function closeChapterWinModal() { modalChapterWin.classList.add('hidden'); returnToLevelSelect(); }
+        function nextLevel() { modalWin.classList.add('hidden'); if (gameState.currentLevel < 14) startLevel(gameState.currentChapter, gameState.currentLevel + 1); else returnToLevelSelect(); }
+
+        function renderFrame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const ch = CHAPTERS[gameState.currentChapter];
+
+            // Background Theme Gradient
+            ctx.fillStyle = ch.bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(-camera.x, -camera.y);
+
+            // Water Zones
+            levelData.waterZones.forEach(w => {
+                ctx.fillStyle = 'rgba(14, 165, 233, 0.45)';
+                ctx.fillRect(w.x, w.y, w.w, w.h);
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.7)';
+                ctx.fillRect(w.x, w.y, w.w, 8);
+            });
+
+            // Platforms
+            levelData.platforms.forEach(p => {
+                ctx.fillStyle = ch.wallColor;
+                ctx.fillRect(p.x, p.y, p.w, p.h);
+                ctx.fillStyle = ch.groundColor;
+                ctx.fillRect(p.x, p.y, p.w, 12);
+            });
+
+            // Springs
+            levelData.springs.forEach(sp => {
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillRect(sp.x, sp.y, sp.w, sp.h);
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(sp.x + 5, sp.y + 5, sp.w - 10, sp.h - 10);
+            });
+
+            // Crates
+            levelData.crates.forEach(cr => {
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(cr.x, cr.y, cr.w, cr.h);
+                ctx.strokeStyle = '#78350f';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(cr.x, cr.y, cr.w, cr.h);
+            });
+
+            // Switches
+            levelData.switches.forEach(sw => {
+                ctx.fillStyle = sw.active ? '#10b981' : '#ef4444';
+                ctx.fillRect(sw.x - 15, sw.y - 10, 30, 20);
+            });
+
+            // Doors
+            levelData.doors.forEach(d => {
+                if (!d.open) {
+                    ctx.fillStyle = '#64748b';
+                    ctx.fillRect(d.x, d.y, d.w, d.h);
+                }
+            });
+
+            // Stars
+            levelData.stars.forEach(st => {
+                if (!st.collected) {
+                    ctx.fillStyle = '#facc15';
+                    ctx.beginPath(); ctx.arc(st.x, st.y, 14, 0, Math.PI * 2); ctx.fill();
+                    ctx.strokeStyle = '#ca8a04'; ctx.lineWidth = 3; ctx.stroke();
+                }
+            });
+
+            // Portal Exit
+            if (levelData.portalExit) {
+                const pr = levelData.portalExit;
+                ctx.fillStyle = '#10b981';
+                ctx.fillRect(pr.x, pr.y, pr.w, pr.h);
+                ctx.fillStyle = '#6ee7b7';
+                ctx.fillRect(pr.x + 10, pr.y + 10, pr.w - 20, pr.h - 20);
+            }
+
+            // Enemies
+            levelData.enemies.forEach(en => {
+                ctx.fillStyle = '#dc2626';
+                ctx.fillRect(en.x, en.y, en.w, en.h);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(en.x + 6, en.y + 8, 8, 8);
+                ctx.fillRect(en.x + 22, en.y + 8, 8, 8);
+            });
+
+            // Boss
+            if (levelData.boss) {
+                const b = levelData.boss;
+                ctx.fillStyle = '#7f1d1d';
+                ctx.fillRect(b.x, b.y, b.w, b.h);
+                ctx.fillStyle = '#f87171';
+                ctx.fillRect(b.x + 15, b.y + 20, 25, 25);
+                ctx.fillRect(b.x + 70, b.y + 20, 25, 25);
+            }
+
+            // Player Ball with Squash & Stretch
+            const skin = SKINS[gameState.selectedSkin] || SKINS[0];
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            ctx.rotate(player.angle);
+            ctx.scale(player.squashX, player.squashY);
+
+            ctx.fillStyle = skin.color;
+            ctx.beginPath(); ctx.arc(0, 0, player.radius, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = skin.border; ctx.lineWidth = 4; ctx.stroke();
+
+            // Eyes
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath(); ctx.arc(-6, -4, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(8, -4, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#000000';
+            ctx.beginPath(); ctx.arc(-5, -4, 3, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(9, -4, 3, 0, Math.PI * 2); ctx.fill();
+
+            ctx.restore();
+
+            // Particles
+            particles.forEach(pt => {
+                ctx.fillStyle = pt.color;
+                ctx.globalAlpha = pt.alpha;
+                ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2); ctx.fill();
+                ctx.globalAlpha = 1;
+            });
+
+            ctx.restore();
+        }
+    </script>
+</body>
+</html>
